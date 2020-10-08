@@ -1,0 +1,21 @@
+version: '3.7'
+
+secrets:
+  id_rsa:
+    file:
+  id_rsa.pub:
+    file:
+  known_hosts:
+    file:
+
+services:
+
+#  servicedb:
+#    ports:
+#      - 3307:3306
+
+  php_swoole_csv_handler:
+    ports:
+      - 8080:9501
+#    environment:
+#      - FOO=bar

@@ -1,0 +1,54 @@
+version: '3.7'
+
+volumes:
+  app_memcached: {}
+  app_database: {}
+
+networks:
+  swoole_csv_handler_network:
+    name: swoole_csv_handler_network
+    driver: bridge
+
+services:
+
+  php_swoole_csv_handler:
+    build: php
+    hostname: swoole_csv_handler_host
+    volumes:
+      - ../:/var/www:delegated
+      - ./data/shell_history:/home/utente/shell_history
+    networks:
+      - swoole_csv_handler_network
+    environment:
+      HISTFILE: /home/utente/shell_history/.x_history
+      AUTORELOAD_PROGRAMS: "swoole"
+      AUTORELOAD_ANY_FILES: 0
+    secrets:
+      - source: id_rsa
+        target: /home/utente/.ssh/id_rsa
+      - source: id_rsa.pub
+        target: /home/utente/.ssh/id_rsa.pub
+      - source: known_hosts
+        target: /home/utente/.ssh/known_hosts
+
+#  servicedb:
+#    image: mariadb:10.3.22
+#    volumes:
+#      - app_database:/var/lib/mysql
+#      - ./mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf
+#      - ./data/db:/docker-entrypoint-initdb.d
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=root
+#      - MYSQL_DATABASE=db_name
+#    command: mysqld --sql_mode="" #Per mysql, non serve per mariadb
+#    networks:
+#      - swoole_csv_handler_network
+
+  nodejs:
+    build: nodejs
+    working_dir: /var/www
+    #command: "commitlint -e --from=HEAD"
+    volumes:
+      - ../:/var/www
+    networks:
+      - swoole_csv_handler_network

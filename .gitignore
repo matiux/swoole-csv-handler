@@ -1,0 +1,17 @@
+###> Docker ###
+docker/docker-compose.override.yml
+docker/php/ssh
+docker/php/git
+docker/data/shell_history/.x_history
+###< Docker ###
+
+###> Misc ###
+.idea
+/vendor/
+###< Misc ###
+
+###> friendsofphp/php-cs-fixer ###
+.php_cs
+.php_cs.cache
+lsp
+###< friendsofphp/php-cs-fixer ###
