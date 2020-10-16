@@ -2,12 +2,11 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
-    ->exclude(['var','src/App'])
+    ->exclude(['var','vendor'])
 ;
 
 return PhpCsFixer\Config::create()
     ->setRules([
-        '@Symfony' => true,
         'declare_strict_types' => true,
         '@PhpCsFixer' => true,
         'php_unit_test_class_requires_covers' => false,

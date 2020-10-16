@@ -1,0 +1,9 @@
+upload:
+  path: /upload
+  controller: SwooleCSVHandler\Upload\Infrastructure\Communication\Http\Controller\UploadController::postUpload
+  methods: POST
+
+index:
+  path: /
+  controller: SwooleCSVHandler\Upload\Infrastructure\Communication\Http\Controller\UploadController::getIndex
+  methods: GET

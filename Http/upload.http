@@ -1,0 +1,23 @@
+POST {{protocol}}{{server}}{{port}}/upload
+Accept: text/csv
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file_to_upload"; filename="small.csv"
+
+< ../Resources/small.csv
+--WebAppBoundary--
+
+###
+
+POST {{protocol}}{{server}}{{port}}/upload
+Accept: text/csv
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file_to_upload"; filename="big.csv"
+
+< ../Resources/big.csv
+--WebAppBoundary--
+
+###

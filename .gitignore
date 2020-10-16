@@ -8,6 +8,7 @@ docker/data/shell_history/.x_history
 ###> Misc ###
 .idea
 /vendor/
+Http/rest-client.private.env.json
 ###< Misc ###
 
 ###> friendsofphp/php-cs-fixer ###

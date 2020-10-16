@@ -13,9 +13,9 @@ services:
 
   php_swoole_csv_handler:
     build: php
-    hostname: swoole_csv_handler_host
+    #hostname: swoole_csv_handler_host
     volumes:
-      - ../:/var/www:delegated
+      - ../:/var/www/app
       - ./data/shell_history:/home/utente/shell_history
     networks:
       - swoole_csv_handler_network
@@ -46,9 +46,9 @@ services:
 
   nodejs:
     build: nodejs
-    working_dir: /var/www
+    working_dir: /var/www/app
     #command: "commitlint -e --from=HEAD"
     volumes:
-      - ../:/var/www
+      - ../:/var/www/app
     networks:
       - swoole_csv_handler_network
