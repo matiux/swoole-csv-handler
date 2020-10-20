@@ -7,3 +7,8 @@ index:
   path: /
   controller: SwooleCSVHandler\Upload\Infrastructure\Communication\Http\Controller\UploadController::getIndex
   methods: GET
+
+process:
+  path: /handle
+  controller: SwooleCSVHandler\CsvHandler\Infrastructure\Communication\Http\Controller\CsvHandlerController::getHandleCsv
+  methods: GET
