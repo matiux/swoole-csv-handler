@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace SwooleCSVHandler\Upload\Infrastructure\Communication\Http\Controller;
 
-use Co\System;
 use Exception;
-use Swoole\Coroutine\Http\Client;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
+use Swoole\Server;
 
 class UploadController
 {
@@ -36,13 +35,28 @@ class UploadController
         }
     }
 
-    public function getIndex(Response $response, Request $request): void
-    {echo 'foo1';
-        $client = new Client('127.0.0.1', 80);
-        $client->get('/handle');
-        $b=$client->getBody();
-        System::sleep(4);
+    public static function getIndex(Response $response, Request $request): void
+    {
+
+
+//        $server = new Server('127.0.0.1', 9501);
+//        $server->set([
+//            'task_worker_num' => 1,
+//        ]);
+//
+//        $server->on('receive', function($server, $fd, $from_id, $data){
+//
+//            // Send data to the task worker process
+//            $task_id = $server->task($data);
+//            echo "Dispatch async task: id = {$task_id}\n";
+//
+//            // Send data to the client
+//            $server->send($fd, "Server: " . $data);
+//        });
+
+        //$server->start();
+
         $response->header('Content-Type', 'text/html');
-        $response->end('<html><body><h1>Hello World!!</h1></body></html>');
+        $response->end('<html><body><h1>Hello World!!!!</h1></body></html>');
     }
 }
