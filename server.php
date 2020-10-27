@@ -13,6 +13,7 @@ use Symfony\Component\Routing\RequestContext;
 $server = new Swoole\HTTP\Server('0.0.0.0', 9501);
 $server->set([
     'task_worker_num' => 1,
+    'task_enable_coroutine' => true,
     'package_max_length' => 1024 * 1024 * 20, // 20Mb
 ]);
 
@@ -33,14 +34,40 @@ $server->on('start', function (Swoole\Http\Server $server) {
 
 class TaskWorker
 {
-    public function __invoke($server, $taskId, $fromId, $data)
+    public function __invoke(Swoole\Server $server, Swoole\Server\Task $task)
     {
-        echo "->> Receive new task \"$data\", id : {$taskId}. Eseguo...\n";
+        $data = $task->data;
+
+        $sleep = rand(1, 3);
+        echo "->> Sleep {$sleep} sec\n";
+
+        System::sleep($sleep);
+
+        switch ($data->operation) {
+            case 'OP1':
+                echo "->> Receive new task. ID: {$task->id} | Operazione: \"OP1\". Eseguo...\n";
+
+                break;
+            case 'OP2':
+                echo "->> Receive new task. ID: {$task->id} | Operazione: \"OP2\". Eseguo...\n";
+
+                break;
+            default:
+                throw new Exception('Invalid operation');
+        }
 
         // Return the result of executing task
-        $server->finish("\"$data\" -> finished");
+        //$server->finish("\"{$data->operation}\" -> finished");
+        $task->finish("\"{$data->operation}\" -> finished");
     }
 }
+
+$server->on('finish', function ($server, $task_id, $data) {
+    // Handle the result of executing task
+
+    echo "->> Async task {$task_id} result : {$data} \n";
+    echo "-------------------------------------------\n";
+});
 
 $server->on('task', new TaskWorker());
 
@@ -57,21 +84,15 @@ $server->on('request', function (Request $request, Response $response) use ($ser
 
         call_user_func($parameters['_controller'], $response, $request);
 
-        System::sleep(3);
+        System::sleep(5);
 
-        $server->task('OPERAZIONE');
-
+        $op = new stdClass();
+        $op->operation = 'OP1';
+        $server->task($op);
     } catch (Exception $e) {
         $response->header('Content-Type', 'text/html');
         $response->end("<html><body><h1>Pagina non trovata</h1><h2>{$e->getMessage()}</h2></body></html>");
     }
-});
-
-
-$server->on('finish', function($server, $task_id, $data){
-    // Handle the result of executing task
-
-    echo "->> Async task {$task_id} result : {$data} \n";
 });
 
 $server->start();

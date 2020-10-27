@@ -37,25 +37,6 @@ class UploadController
 
     public static function getIndex(Response $response, Request $request): void
     {
-
-
-//        $server = new Server('127.0.0.1', 9501);
-//        $server->set([
-//            'task_worker_num' => 1,
-//        ]);
-//
-//        $server->on('receive', function($server, $fd, $from_id, $data){
-//
-//            // Send data to the task worker process
-//            $task_id = $server->task($data);
-//            echo "Dispatch async task: id = {$task_id}\n";
-//
-//            // Send data to the client
-//            $server->send($fd, "Server: " . $data);
-//        });
-
-        //$server->start();
-
         $response->header('Content-Type', 'text/html');
         $response->end('<html><body><h1>Hello World!!!!</h1></body></html>');
     }
