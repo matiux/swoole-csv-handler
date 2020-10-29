@@ -1,0 +1,92 @@
+{
+	"name": "csv-swoole-handler-frontend",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Official FE for the CSV Swoole Handler Project",
+	"license": "MIT",
+	"contributors": [
+		{
+			"name": "Guido Porcaro <guich96@gmail.com>"
+		}
+	],
+	"main": "build/index.html",
+	"files": [
+		"build"
+	],
+	"scripts": {
+		"build": "yarn run build:styles && react-scripts build",
+		"build:styles": "postcss src/styles/tailwind.css -o src/index.css",
+		"changelog": "auto-changelog -p --release-summary",
+		"eject": "react-scripts eject",
+		"dev": "yarn run watch:styles & react-scripts start",
+		"scripts": "npm-scripts-info",
+		"test": "react-scripts test",
+		"watch:styles": "postcss src/styles/tailwind.css -o src/index.css -w"
+	},
+	"scripts-info": {
+		"build": "Builds the project generating a dist folder",
+		"build:styles": "Builds the styles from tailwind",
+		"changelog": "Writes to the CHANGELOG.md the commits/pr added to the release",
+		"dev": "Runs the project locally",
+		"eject": "Ejects the webpack config (don't run if you don't know what you're doing, you can't revert it)",
+		"scripts": "Displays you what are you currently reading :)",
+		"test": "Runs the test suite (through jest)",
+		"watch:styles": "Builds the styles everytime the css input file is edited"
+	},
+	"dependencies": {
+		"@testing-library/jest-dom": "^5.11.4",
+		"@testing-library/react": "^11.1.0",
+		"@testing-library/user-event": "^12.1.10",
+		"react": "^17.0.1",
+		"react-dom": "^17.0.1",
+		"react-hook-form": "^6.9.6",
+		"react-scripts": "4.0.0",
+		"tailwindcss": "^1.9.6",
+		"web-vitals": "^0.2.4"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^11.0.0",
+		"@commitlint/config-conventional": "^11.0.0",
+		"auto-changelog": "^2.2.1",
+		"autoprefixer": "^10.0.1",
+		"cssnano": "^4.1.10",
+		"eslint-plugin-prettier": "^3.1.4",
+		"husky": "^5.0.0-beta.0",
+		"lint-staged": "^10.5.0",
+		"npm-scripts-info": "^0.3.9",
+		"postcss": "^8.1.4",
+		"postcss-cli": "^8.2.0",
+		"prettier": "^2.1.2"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		],
+		"plugins": [
+			"prettier"
+		]
+	},
+	"husky": {
+		"hooks": {
+			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.{js,jsx,json}": "eslint --fix --ignore-path .gitignore .",
+		"*.{html,css,scss,md}": "prettier --write"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
+}

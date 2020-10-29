@@ -1,0 +1,13 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.header {
+	@apply .bg-teal-400;
+}
+
+.footer {
+	@apply .bg-teal-500;
+}
