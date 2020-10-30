@@ -42,7 +42,8 @@
 		"react-hook-form": "^6.9.6",
 		"react-scripts": "4.0.0",
 		"tailwindcss": "^1.9.6",
-		"web-vitals": "^0.2.4"
+		"web-vitals": "^0.2.4",
+		"wretch": "^1.7.4"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
