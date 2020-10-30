@@ -8,18 +8,24 @@ import UploadFile from '../../api/uploadFile'
 
 /**
  * The form component
+ * @param context - {Object} - The memoized context
  * @returns {JSX.Element}
  * @constructor
  */
-const CSVForm = () => {
+const CSVForm = ({ context }) => {
 	const [responseStatus, setResponseStatus] = useState('')
 	const { formState, handleSubmit, register } = useForm({ mode: 'onChange' })
+	const { dispatch } = context
 
 	const onSubmit = async ({ csvInput }) => {
 		const [file] = csvInput
 
+		dispatch({ type: 'SET_IS_LOADING', payload: true })
+
 		const { statusText } = await UploadFile(file)
 		setResponseStatus(statusText)
+
+		dispatch({ type: 'SET_IS_LOADING', payload: false })
 	}
 
 	return (
