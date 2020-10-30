@@ -16,3 +16,5 @@ Http/rest-client.private.env.json
 .php_cs.cache
 lsp
 ###< friendsofphp/php-cs-fixer ###
+
+.DS_Store
