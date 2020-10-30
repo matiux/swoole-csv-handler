@@ -9,6 +9,9 @@ docker/data/shell_history/.x_history
 .idea
 /vendor/
 Http/rest-client.private.env.json
+frontend/node_modules
+node_modules
+.DS_Store
 ###< Misc ###
 
 ###> friendsofphp/php-cs-fixer ###
@@ -17,4 +20,4 @@ Http/rest-client.private.env.json
 lsp
 ###< friendsofphp/php-cs-fixer ###
 
-.DS_Store
+
