@@ -36,6 +36,17 @@
 	@apply .w-full .mb-2;
 }
 
+.loader {
+	@apply .w-full .h-full .fixed .block .top-0 .left-0 .bg-black .opacity-75 .z-50;
+}
+
+.centered {
+	@apply .absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 .tc {
 	@apply .text-center;
 }
