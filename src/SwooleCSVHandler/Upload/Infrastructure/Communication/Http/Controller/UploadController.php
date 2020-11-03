@@ -7,11 +7,11 @@ namespace SwooleCSVHandler\Upload\Infrastructure\Communication\Http\Controller;
 use Exception;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
-use Swoole\Server;
+use Swoole\Http\Server;
 
 class UploadController
 {
-    public function postUpload(Response $response, Request $request): void
+    public static function postUpload(Response $response, Request $request, Server $server): void
     {
         $uploadedFileNameKey = 'file_to_upload';
 
@@ -25,19 +25,20 @@ class UploadController
         $result = move_uploaded_file($file['tmp_name'], $destinationPath.'/'.$file['name']);
 
         if ($result) {
-            $response->header('Content-Type', 'text/html');
+            $response->header('Content-Type', 'application/json');
             $response->status(200);
-            $response->end('<html><body><h1>File carrricato</h1></body></html>');
+            $response->end(json_encode(['msg' => 'File carrricato']));
         } else {
-            $response->header('Content-Type', 'text/html');
+            $response->header('Content-Type', 'application/json');
             $response->status(500);
-            $response->end('<html><body><h1>File NON carrricato</h1></body></html>');
+            $response->end(json_encode(['msg' => 'File NON carrricato']));
         }
     }
 
-    public static function getIndex(Response $response, Request $request): void
+    public static function getIndex(Response $response, Request $request, Server $server): void
     {
-        $response->header('Content-Type', 'text/html');
-        $response->end('<html><body><h1>Hello World!!!!</h1></body></html>');
+        $response->header('Content-Type', 'application/json');
+        $body = json_encode(['msg' => 'Hello World!!!!']);
+        $response->end($body);
     }
 }

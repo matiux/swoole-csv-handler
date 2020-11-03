@@ -14,31 +14,36 @@ DC_BASE_COMMAND="docker-compose
     ${COMPOSE_OVERRIDE}
     -p ${PROJECT_NAME}"
 
-#DC_RUN="${DC_BASE_COMMAND}
-#    run
-#    --rm
-#    -u utente
-#    -v ${PWD}:${WORKDIR}
-#    -w ${WORKDIR}
-#    ${PHP_CONTAINER}"
-
-  DC_EXEC="${DC_BASE_COMMAND}
-    exec
+DC_RUN="${DC_BASE_COMMAND}
+    run
+    --rm
     -u utente
-    -T
+    -v ${PWD}:${WORKDIR}
     -w ${WORKDIR}
     ${PHP_CONTAINER}"
+
+#-T
+DC_EXEC="${DC_BASE_COMMAND}
+  exec
+  -u utente
+  -w ${WORKDIR}
+  ${PHP_CONTAINER}"
 
 if [[ "$1" == "composer" ]]; then
 
   shift 1
-  ${DC_EXEC} \
+  ${DC_RUN} \
     composer "$@"
 
 elif [[ "$1" == "php-cs-fixer-fix" ]]; then
 
   shift 1
-  ${DC_EXEC} \
+  ${DC_BASE_COMMAND} \
+    exec \
+    -u utente \
+    -T \
+    -w ${WORKDIR} \
+    ${PHP_CONTAINER} \
     vendor/bin/php-cs-fixer fix --config=.php_cs.dist "$@"
 
 elif [[ "$1" == "php-cs-fixer" ]]; then
@@ -70,20 +75,15 @@ elif [[ "$1" == "build" ]] && [[ "$2" == "php" ]]; then
   ${DC_BASE_COMMAND} \
     build ${PHP_CONTAINER}
 
-elif [[ "$1" == "enter-root" ]]; then
-
-  ${DC_BASE_COMMAND} \
-    exec \
-    -u root \
-    ${PHP_CONTAINER} /bin/zsh
-
 elif [[ "$1" == "enter" ]]; then
 
-  ${DC_BASE_COMMAND} \
-    exec \
-    -u utente \
-    -w ${WORKDIR} \
-    ${PHP_CONTAINER} /bin/zsh
+  ${DC_EXEC} \
+     /bin/zsh
+
+elif [[ "$1" == "enter-root" ]]; then
+
+  ${DC_EXEC} \
+    /bin/zsh
 
 elif [[ "$1" == "down" ]]; then
 

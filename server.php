@@ -8,17 +8,20 @@ use App\RouterMatcher;
 use Co\System;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
-use Symfony\Component\Routing\RequestContext;
+use Swoole\Http\Server;
+use SwooleCSVHandler\Common\Application\Util\CEcho;
 
 $server = new Swoole\HTTP\Server('0.0.0.0', 9501);
 $server->set([
     'task_worker_num' => 1,
     'task_enable_coroutine' => true,
     'package_max_length' => 1024 * 1024 * 20, // 20Mb
+    'document_root' => '/var/www/app',
+    'enable_static_handler' => true,
 ]);
 
 $server->on('start', function (Swoole\Http\Server $server) {
-    echo "->> Swoole http server is started at http://0.0.0.0:9501\n";
+    CEcho::echon('|->> Swoole http server is started at http://0.0.0.0:9501', 'green');
 });
 
 //$server->on('receive', function ($server, $fd, $from_id, $data) {
@@ -39,17 +42,17 @@ class TaskWorker
         $data = $task->data;
 
         $sleep = rand(1, 3);
-        echo "->> Sleep {$sleep} sec\n";
+        CEcho::echon("|->> Sleep {$sleep} sec", 'green');
 
         System::sleep($sleep);
 
         switch ($data->operation) {
             case 'OP1':
-                echo "->> Receive new task. ID: {$task->id} | Operazione: \"OP1\". Eseguo...\n";
+                CEcho::echon("|->> Receive new task. ID: {$task->id} | Operazione: \"OP1\". Eseguo...", 'green');
 
                 break;
             case 'OP2':
-                echo "->> Receive new task. ID: {$task->id} | Operazione: \"OP2\". Eseguo...\n";
+                CEcho::echon("|->> Receive new task. ID: {$task->id} | Operazione: \"OP2\". Eseguo...", 'green');
 
                 break;
             default:
@@ -62,25 +65,20 @@ class TaskWorker
     }
 }
 
-$server->on('finish', function ($server, $task_id, $data) {
+$server->on('finish', function (Server $server, $task_id, $data) {
     // Handle the result of executing task
-
-    echo "->> Async task {$task_id} result : {$data} \n";
-    echo "-------------------------------------------\n";
+    CEcho::echon("|->> Async task {$task_id} result : {$data}", 'green');
+    CEcho::echon('-------------------------------------------', 'green');
 });
 
 $server->on('task', new TaskWorker());
 
 $server->on('request', function (Request $request, Response $response) use ($server) {
-    if ('/favicon.ico' === $request->server['request_uri']) {
-        return;
-    }
+    $response->header('Access-Control-Allow-Origin', '*');
 
     try {
-        $context = new RequestContext($request->server['request_uri'], $request->server['request_method']);
-        $routeMatcher = new RouterMatcher($context);
-
-        $parameters = $routeMatcher->match($request->server['request_uri']);
+        $routeMatcher = new RouterMatcher();
+        $parameters = $routeMatcher->match($request->server['request_uri'], $request->server['request_method']);
 
         call_user_func($parameters['_controller'], $response, $request);
 
@@ -88,7 +86,7 @@ $server->on('request', function (Request $request, Response $response) use ($ser
 
         $op = new stdClass();
         $op->operation = 'OP1';
-        $server->task($op);
+        $server->task('..');
     } catch (Exception $e) {
         $response->header('Content-Type', 'text/html');
         $response->end("<html><body><h1>Pagina non trovata</h1><h2>{$e->getMessage()}</h2></body></html>");

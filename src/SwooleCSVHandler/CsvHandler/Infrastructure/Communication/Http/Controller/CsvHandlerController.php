@@ -7,10 +7,11 @@ namespace SwooleCSVHandler\CsvHandler\Infrastructure\Communication\Http\Controll
 use Co\System;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
+use Swoole\Http\Server;
 
 class CsvHandlerController
 {
-    public function getHandleCsv(Response $response, Request $request): void
+    public function getHandleCsv(Response $response, Request $request, Server $server): void
     {
         //System::sleep(2);
 //        echo 'foo';

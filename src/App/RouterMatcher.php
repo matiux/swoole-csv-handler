@@ -6,22 +6,25 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\RouteCollection;
 
 class RouterMatcher
 {
-    private UrlMatcher $matcher;
+    private RouteCollection $routes;
 
-    public function __construct(RequestContext $context)
+    public function __construct()
     {
         $fileLocator = new FileLocator([__DIR__.'/../../config/routes']);
         $loader = new YamlFileLoader($fileLocator);
-        $routes = $loader->load('routes.yaml');
-
-        $this->matcher = new UrlMatcher($routes, $context);
+        $this->routes = $loader->load('routes.yaml');
     }
 
-    public function match(string $pathInfo): array
+    public function match(string $requestUri, string $requestMethod): array
     {
-        return $this->matcher->match($pathInfo);
+        $context = new RequestContext('/', $requestMethod);
+
+        $matcher = new UrlMatcher($this->routes, $context);
+
+        return $matcher->match($requestUri);
     }
 }
