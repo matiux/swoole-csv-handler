@@ -11,10 +11,7 @@ export default async function uploadFile(file) {
 			file_to_upload: file,
 		}
 
-		return await wretch(`${process.env.REACT_APP_ENDPOINT}/upload`)
-			.formData(excelBody)
-			.post()
-			.res((res) => res)
+		return await wretch(`${process.env.REACT_APP_ENDPOINT}/upload`).formData(excelBody).post().json()
 	} catch (e) {
 		console.error(e)
 	}

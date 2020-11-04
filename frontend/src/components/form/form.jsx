@@ -19,11 +19,12 @@ const CSVForm = ({ context }) => {
 
 	const onSubmit = async ({ csvInput }) => {
 		const [file] = csvInput
+		setResponseStatus('')
 
 		dispatch({ type: 'SET_IS_LOADING', payload: true })
 
-		const { statusText } = await UploadFile(file)
-		setResponseStatus(statusText)
+		const { msg } = await UploadFile(file)
+		setResponseStatus(msg)
 
 		dispatch({ type: 'SET_IS_LOADING', payload: false })
 	}
