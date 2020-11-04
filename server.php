@@ -80,7 +80,7 @@ $server->on('request', function (Request $request, Response $response) use ($ser
         $routeMatcher = new RouterMatcher();
         $parameters = $routeMatcher->match($request->server['request_uri'], $request->server['request_method']);
 
-        call_user_func($parameters['_controller'], $response, $request);
+        call_user_func($parameters['_controller'], $response, $request, $server);
 
         System::sleep(5);
 
