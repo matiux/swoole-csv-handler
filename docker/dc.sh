@@ -22,7 +22,13 @@ DC_RUN="${DC_BASE_COMMAND}
     -w ${WORKDIR}
     ${PHP_CONTAINER}"
 
-#-T
+DC_EXEC_TTY="${DC_BASE_COMMAND}
+  exec
+  -u utente
+  -T
+  -w ${WORKDIR}
+  ${PHP_CONTAINER}"
+
 DC_EXEC="${DC_BASE_COMMAND}
   exec
   -u utente
@@ -38,30 +44,25 @@ if [[ "$1" == "composer" ]]; then
 elif [[ "$1" == "php-cs-fixer-fix" ]]; then
 
   shift 1
-  ${DC_BASE_COMMAND} \
-    exec \
-    -u utente \
-    -T \
-    -w ${WORKDIR} \
-    ${PHP_CONTAINER} \
+  ${DC_EXEC_TTY} \
     vendor/bin/php-cs-fixer fix --config=.php_cs.dist "$@"
 
 elif [[ "$1" == "php-cs-fixer" ]]; then
 
   shift 1
-  ${DC_EXEC} \
+  ${DC_EXEC_TTY} \
     vendor/bin/php-cs-fixer "$@"
 
 elif [[ "$1" == "psalm" ]]; then
 
   shift 1
-  ${DC_EXEC} \
+  ${DC_EXEC_TTY} \
     vendor/bin/psalm "$@"
 
 elif [[ "$1" == "phpunit" ]]; then
 
   shift 1
-  ${DC_EXEC} \
+  ${DC_EXEC_TTY} \
     vendor/bin/phpunit "$@"
 
 elif [[ "$1" == "up" ]]; then

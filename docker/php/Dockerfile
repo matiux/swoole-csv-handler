@@ -1,5 +1,8 @@
 FROM matiux/php-swoole:7.4.11-cli-buster-dev
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    htop
+
 COPY conf/xdebug-starter.sh /usr/local/bin/xdebug-starter
 RUN chmod +x /usr/local/bin/xdebug-starter
 RUN /usr/local/bin/xdebug-starter

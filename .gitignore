@@ -12,6 +12,7 @@ Http/rest-client.private.env.json
 frontend/node_modules
 node_modules
 .DS_Store
+.phpunit.result.cache
 ###< Misc ###
 
 ###> friendsofphp/php-cs-fixer ###

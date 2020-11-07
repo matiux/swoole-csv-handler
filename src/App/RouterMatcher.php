@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\RouteCollection;
 
 class RouterMatcher
