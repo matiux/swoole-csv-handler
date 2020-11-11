@@ -5,74 +5,77 @@ declare(strict_types=1);
 namespace SwooleCSVHandler\CsvHandler\Application\Service;
 
 use Swoole\Coroutine\Http\Client;
-use Swoole\Coroutine\WaitGroup;
 
 class CsvRowProcessor
 {
     /**
      * @var string[]
      */
-    private array $keys = ['red', 'green', 'power'];
+    private array $keys = ['power', 'green', 'red', 'dog'];
+
+    /** @psalm-var list<array{url: string, count: int, size: int, ms: float}> */
+    private array $responses = [];
 
     /**
-     * @param array{id: string, firstname: string, lastname: string, email: string, url: string, calls_number: int} $row
+     * @param array{id: string, firstname: string, lastname: string, email: string, url: string, descriptions: string, calls_number: int} $row
      *
-     * @return list<array{url: string, count: int, size: int}>
+     * @return list<array{url: string, count: int, size: int, ms: float}>
      */
     public function execute(array $row): array
     {
-        $callsNumber = $row['calls_number'];
-        $url = $row['url'];
+        $descriptions = explode(';', trim($row['descriptions']));
 
-        /** @var list<array{url: string, count: int, size: int}> $responses */
-        $responses = [];
-        \Co\run(function () use ($callsNumber, $url, &$responses) {
-            $wg = new WaitGroup();
+        $url = (string) $row['url'];
+        $this->responses = [];
+        \Co\run(function () use ($descriptions, $url) {
+            foreach ($descriptions as $i => $description) {
+                go(function () use ($url, $i, $description) {
+                    //echo "Call: {$i}) ".$url.'='.$description."\n";
 
-            for ($i = 0; $i < $callsNumber; ++$i) {
-                go(function () use ($url, &$responses, $wg) {
-                    $wg->add();
-                    $responses[] = $this->callUrl($url);
-
-                    $wg->done();
+                    $this->callUrl($url, $description);
                 });
-
-                //$wg->wait(1);
             }
         });
 
-        return $responses;
+        return $this->responses;
     }
 
     /**
      * @param string $url
-     *
-     * @return array{url: string, count: int, size: int}
+     * @param string $description
      */
-    private function callUrl(string $url): array
+    private function callUrl(string $url, string $description): void
     {
-        $parts = parse_url($url);
+        $host = parse_url($url)['host'];
+        $client = new Client($host, 443, true);
+        $url = sprintf('%s=%s', $url, $description);
+        $start = microtime(true);
+        $client->get($url);
+        $time_elapsed_secs = microtime(true) - $start;
 
+        $client->close();
+
+        $this->responses[] = $this->buildResponse($url, $client, $time_elapsed_secs);
+    }
+
+    /**
+     * @param string $url
+     * @param Client $client
+     * @param float  $time_elapsed_secs
+     *
+     * @return array{url: string, count: int, size: int, ms: float}
+     */
+    private function buildResponse(string $url, Client $client, float $time_elapsed_secs): array
+    {
         $response = [];
 
-        $client = new Client($parts['host'], 443, true);
-        $path = sprintf('%s?description=%s', $parts['path'], $this->keys[rand(0, 2)]);
-        $client->get($path);
-        $response['url'] = $url.$path;
-        $response['count'] = (int) json_decode($client->body, true)['count'];
-        $response['size'] = (int) strlen($client->body);
-        $client->close();
+        $response['url'] = $url;
+        /** @var array{count: int} $body */
+        $body = json_decode((string) $client->body, true);
+        $response['count'] = (int) $body['count'];
+        $response['size'] = (int) strlen((string) $client->body);
+        $response['ms'] = round($time_elapsed_secs, 3);
 
         return $response;
     }
 }
-
-/**
- *     go(function () use ($key) {.
- * $client = new \Co\Http\Client('api.publicapis.org', 443, true);
- * $client->get("/entries?description={$key}");
- * echo $client->host."/entries?description={$key}"."\n";
- * echo json_decode($client->body, true)['count']."\n";
- * $client->close();
- * });.
- */

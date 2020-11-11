@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 WORKDIR=/var/www/app
-PROJECT_NAME=$(basename "$(pwd)" | tr '[:upper:]' '[:lower:]')
+#PROJECT_NAME=$(basename "$(pwd)" | tr '[:upper:]' '[:lower:]')
 COMPOSE_OVERRIDE=
 PHP_CONTAINER=php_swoole_csv_handler
 
@@ -9,10 +9,14 @@ if [[ -f "./docker/docker-compose.override.yml" ]]; then
   COMPOSE_OVERRIDE="--file ./docker/docker-compose.override.yml"
 fi
 
+#DC_BASE_COMMAND="docker-compose
+#    --file docker/docker-compose.yml
+#    ${COMPOSE_OVERRIDE}
+#    -p ${PROJECT_NAME}"
+
 DC_BASE_COMMAND="docker-compose
     --file docker/docker-compose.yml
-    ${COMPOSE_OVERRIDE}
-    -p ${PROJECT_NAME}"
+    ${COMPOSE_OVERRIDE}"
 
 DC_RUN="${DC_BASE_COMMAND}
     run

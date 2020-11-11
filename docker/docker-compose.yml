@@ -20,6 +20,7 @@ services:
     networks:
       - swoole_csv_handler_network
     environment:
+      COMPOSE_PROJECT_NAME: swoole-csv-handler
       HISTFILE: /home/utente/shell_history/.x_history
       AUTORELOAD_PROGRAMS: "swoole"
       AUTORELOAD_ANY_FILES: 0
@@ -52,3 +53,5 @@ services:
       - ../:/var/www/app
     networks:
       - swoole_csv_handler_network
+    environment:
+      COMPOSE_PROJECT_NAME: swoole-csv-handler

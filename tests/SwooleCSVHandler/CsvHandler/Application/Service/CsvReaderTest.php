@@ -26,7 +26,7 @@ class CsvReaderTest extends TestCase
             ++$rowsCounter;
             self::assertNotEmpty($row);
             self::assertIsArray($row);
-            self::assertCount(6, $row);
+            self::assertCount(7, $row);
         }
 
         self::assertSame(11, $rowsCounter);
