@@ -1,4 +1,4 @@
-FROM matiux/php-swoole:7.4.11-cli-buster-dev
+FROM matiux/php-swoole:4.5.7-7.4.12-buster-dev
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     htop

@@ -40,3 +40,31 @@ echo 'Stampa...'."\n";
 print_r($res);
 echo 'Stampa finita'."\n";
 
+
+
+//function caller(): array
+//{
+//    $results = [];
+//
+//    Co\run(function () use (&$results) {
+//        $data = ['power', 'green', 'red', 'dog'];
+//
+//        foreach ($data as $i => $val) {
+//            go(function () use (&$results, $val) {
+//                $host = 'api.publicapis.org';
+//                $query = '/entries?description='.$val;
+//                $client = new Client($host, 443, true);
+//                $start = microtime(true);
+//                $client->get($query);
+//                $time_elapsed_secs = microtime(true) - $start;
+//                $count = (int) json_decode($client->body, true)['count'];
+//                $results[] = $host.$query.' - count: '.$count.' - ms: '.round($time_elapsed_secs, 3);
+//                $client->close();
+//            });
+//        }
+//    });
+//
+//    return $results;
+//}
+//
+//var_dump(caller());

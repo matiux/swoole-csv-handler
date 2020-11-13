@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SwooleCSVHandler\CsvHandler\Application\Service;
 
-use Swoole\Coroutine\Http\Client;
+use Co\Http\Client;
 
 class CsvRowProcessor
 {
@@ -26,7 +26,7 @@ class CsvRowProcessor
         $descriptions = explode(';', trim($row['descriptions']));
 
         $url = (string) $row['url'];
-        $this->responses = [];
+        $this->resetResponse();
         \Co\run(function () use ($descriptions, $url) {
             foreach ($descriptions as $i => $description) {
                 go(function () use ($url, $i, $description) {
@@ -38,6 +38,11 @@ class CsvRowProcessor
         });
 
         return $this->responses;
+    }
+
+    private function resetResponse(): void
+    {
+        $this->responses = [];
     }
 
     /**
@@ -72,7 +77,12 @@ class CsvRowProcessor
         $response['url'] = $url;
         /** @var array{count: int} $body */
         $body = json_decode((string) $client->body, true);
-        $response['count'] = (int) $body['count'];
+
+        if (null == $body) {
+            var_dump($client->body);
+        }
+
+        $response['count'] = (int) $body['meta']['pagination']['total'];
         $response['size'] = (int) strlen((string) $client->body);
         $response['ms'] = round($time_elapsed_secs, 3);
 
