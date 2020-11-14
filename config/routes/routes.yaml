@@ -12,3 +12,8 @@ process:
   path: /handle
   controller: SwooleCSVHandler\CsvHandler\Infrastructure\Communication\Http\Controller\CsvHandlerController::getHandleCsv
   methods: GET
+
+entries:
+  path: /entries
+  controller: SwooleCSVHandler\Entries\Infrastructure\Communication\Http\Controller\EntriesController::getEntries
+  methods: GET

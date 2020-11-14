@@ -30,7 +30,7 @@ class CsvRowProcessor
         \Co\run(function () use ($descriptions, $url) {
             foreach ($descriptions as $i => $description) {
                 go(function () use ($url, $i, $description) {
-                    //echo "Call: {$i}) ".$url.'='.$description."\n";
+                    echo "Call: {$i}) ".$url.'='.$description."\n";
 
                     $this->callUrl($url, $description);
                 });
@@ -52,7 +52,7 @@ class CsvRowProcessor
     private function callUrl(string $url, string $description): void
     {
         $host = parse_url($url)['host'];
-        $client = new Client($host, 443, true);
+        $client = new Client($host,9501);
         $url = sprintf('%s=%s', $url, $description);
         $start = microtime(true);
         $client->get($url);
@@ -78,13 +78,10 @@ class CsvRowProcessor
         /** @var array{count: int} $body */
         $body = json_decode((string) $client->body, true);
 
-        if (null == $body) {
-            var_dump($client->body);
-        }
-
-        $response['count'] = (int) $body['meta']['pagination']['total'];
+        //$response['count'] = (int) $body['meta']['pagination']['total'];
+        $response['count'] = (int) $body['count'];
         $response['size'] = (int) strlen((string) $client->body);
-        $response['ms'] = round($time_elapsed_secs, 3);
+        $response['ms'] = round($time_elapsed_secs, 5);
 
         return $response;
     }

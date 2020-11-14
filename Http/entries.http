@@ -1,0 +1,1 @@
+GET {{protocol}}{{server}}{{port}}/entries?description=dog

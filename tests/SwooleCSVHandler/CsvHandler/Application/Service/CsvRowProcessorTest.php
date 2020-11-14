@@ -19,8 +19,8 @@ class CsvRowProcessorTest extends TestCase
             'firstname' => 'Orelia',
             'lastname' => 'Magnolia',
             'email' => 'orelia.magnolia@yopmail.com',
-            'url' => 'https://gorest.co.in/public-api/products?description',
-            'descriptions' => 'cras;centum;versus;temp',
+            'url' => 'http://localhost:9501/entries?description',
+            'descriptions' => 'time;ate;red;dog',
             'calls_number' => 4,
         ];
 
@@ -47,10 +47,10 @@ class CsvRowProcessorTest extends TestCase
         $calledUrls = array_column($resp, 'url');
 
         $urlInOriginalOrderByCSV = [
-            'https://gorest.co.in/public-api/products?description=cras',
-            'https://gorest.co.in/public-api/products?description=centum',
-            'https://gorest.co.in/public-api/products?description=versus',
-            'https://gorest.co.in/public-api/products?description=temp"',
+            'http://localhost:9501/entries?description=time',
+            'http://localhost:9501/entries?description=ate',
+            'http://localhost:9501/entries?description=red',
+            'http://localhost:9501/entries?description=dog',
         ];
 
         self::assertNotSame($calledUrls, $urlInOriginalOrderByCSV);
