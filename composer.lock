@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11034410b391bc39c9f609507a717478",
+    "content-hash": "75a6e2ba7cca2a162920e31246c8189f",
     "packages": [
         {
             "name": "symfony/config",
@@ -1294,6 +1294,57 @@
                 }
             ],
             "time": "2020-05-25T17:44:05+00:00"
+        },
+        {
+            "name": "easyswoole/phpunit",
+            "version": "1.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/easy-swoole/phpunit.git",
+                "reference": "430a2488fa88169cbbda880f6b9158c267ad475f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/easy-swoole/phpunit/zipball/430a2488fa88169cbbda880f6b9158c267ad475f",
+                "reference": "430a2488fa88169cbbda880f6b9158c267ad475f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-swoole": "^4.4.0",
+                "phpunit/phpunit": "^9.3"
+            },
+            "bin": [
+                "bin/co-phpunit"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EasySwoole\\Phpunit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "YF",
+                    "email": "291323003@qq.com"
+                }
+            ],
+            "description": "An efficient swoole framework",
+            "homepage": "https://www.easyswoole.com/",
+            "keywords": [
+                "async",
+                "easyswoole",
+                "framework",
+                "swoole"
+            ],
+            "support": {
+                "issues": "https://github.com/easy-swoole/phpunit/issues",
+                "source": "https://github.com/easy-swoole/phpunit/tree/1.0.10"
+            },
+            "time": "2020-08-28T06:47:59+00:00"
         },
         {
             "name": "felixfbecker/advanced-json-rpc",

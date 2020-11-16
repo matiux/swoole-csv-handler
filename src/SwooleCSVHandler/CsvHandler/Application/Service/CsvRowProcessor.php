@@ -27,15 +27,15 @@ class CsvRowProcessor
 
         $url = (string) $row['url'];
         $this->resetResponse();
-        \Co\run(function () use ($descriptions, $url) {
-            foreach ($descriptions as $i => $description) {
-                go(function () use ($url, $i, $description) {
-                    echo "Call: {$i}) ".$url.'='.$description."\n";
+        //\Co\run(function () use ($descriptions, $url) {
+        foreach ($descriptions as $i => $description) {
+            go(function () use ($url, $i, $description) {
+                echo "Call: {$i}) ".$url.'='.$description."\n";
 
-                    $this->callUrl($url, $description);
-                });
-            }
-        });
+                $this->callUrl($url, $description);
+            });
+        }
+        //});//
 
         return $this->responses;
     }
@@ -52,7 +52,7 @@ class CsvRowProcessor
     private function callUrl(string $url, string $description): void
     {
         $host = parse_url($url)['host'];
-        $client = new Client($host,9501);
+        $client = new Client($host, 9501);
         $url = sprintf('%s=%s', $url, $description);
         $start = microtime(true);
         $client->get($url);
@@ -81,7 +81,7 @@ class CsvRowProcessor
         //$response['count'] = (int) $body['meta']['pagination']['total'];
         $response['count'] = (int) $body['count'];
         $response['size'] = (int) strlen((string) $client->body);
-        $response['ms'] = round($time_elapsed_secs, 5);
+        $response['ms'] = round($time_elapsed_secs, 6);
 
         return $response;
     }

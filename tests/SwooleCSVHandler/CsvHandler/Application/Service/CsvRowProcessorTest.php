@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\SwooleCSVHandler\CsvHandler\Application\Service;
 
+use Co\WaitGroup;
 use PHPUnit\Framework\TestCase;
 use SwooleCSVHandler\CsvHandler\Application\Service\CsvRowProcessor;
 
@@ -25,7 +26,20 @@ class CsvRowProcessorTest extends TestCase
         ];
 
         $csvRowProcessor = new CsvRowProcessor();
-        $resp = $csvRowProcessor->execute($row);
+
+        $resp = [];
+        \Co\run(function () use ($csvRowProcessor, $row, &$resp) {
+
+            $wg = new WaitGroup();
+
+            go(function () use ($csvRowProcessor, $row, &$resp, $wg) {
+                $wg->add();
+                $resp = $csvRowProcessor->execute($row);
+                $wg->done();
+            });
+
+            $wg->wait();
+        });
 
         self::assertCount(4, $resp);
         self::assertMsAreOrdered($resp);
